@@ -1,0 +1,12 @@
+.containerForm {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, .2);
+    border-radius: 20px;
+    box-shadow: 0 4px 10px #00000040;
+    background-color: #dbf2f5;
+
+    width: 450px;
+    padding: 20px;
+    margin: 0 auto 20px;
+}
