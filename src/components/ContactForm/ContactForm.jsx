@@ -1,34 +1,96 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useId } from "react";
+import { nanoid } from "nanoid";
 import * as Yup from "yup";
-
+import { BsPhone, BsPerson } from "react-icons/bs";
 import css from './ContactForm.module.css'
 
-const ContactForm = () => {
 
-const nameId = useId();
-const numberId = useId();
+const FeedbackSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(3, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  number: Yup.string()
+    .matches(/^\d{3}-\d{2}-\d{2}$/, "Invalid phone number format")
+    .required("Required"),
+});
 
-   const initialValues = {
+const initialValues = {
     name: "",
     number: "",
   };
 
+const ContactForm = ({ onAdd }) => {
+
+const nameId = useId();
+const numberId = useId();
+
+const handleSubmit = (values, actions) => {
+    onAdd({
+      id: nanoid(),
+      ...values,
+    });
+    actions.resetForm();
+  };
+
+
     return (
         <Formik
             initialValues={initialValues}
-            onSubmit={() => { }}>
-            <Form className={css.containerForm}>
-                 <label className={css.formLabel} htmlFor={nameId}>
+            onSubmit={handleSubmit}
+            validationSchema={FeedbackSchema}>
+           {({ errors, touched }) => (
+        <Form className={css.containerForm}>
+          <label className={css.formLabel} htmlFor={nameId}>
             Name
-                </label>
-                <Field  type="text"
+          </label>
+
+          <div className={css.thumb}>
+            <Field
+              className={`${css.formInput} ${
+                errors.name && touched.name && css.errorName
+              }`}
+              type="text"
               name="name"
               id={nameId}
               placeholder="Name"
             />
+            <BsPerson className={css.iconInput} size="20" />
+          </div>
+          <ErrorMessage
+            className={css.errorSpan}
+            name="name"
+            component="span"
+          />
 
-            </Form>
+          <label className={css.formLabel} htmlFor={numberId}>
+            Number
+          </label>
+
+          <div className={css.thumb}>
+            <Field
+              className={`${css.formInput} ${
+                errors.number && touched.number && css.errorNumber
+              }`}
+              type="text"
+              name="number"
+              id={numberId}
+              placeholder="xxx-xx-xx"
+            />
+            <BsPhone className={css.iconInput} size="20" />
+          </div>
+          <ErrorMessage
+            className={css.errorSpan}
+            name="number"
+            component="span"
+          />
+
+          <button className={css.buttonAdd} type="submit">
+            Add contact
+          </button>
+        </Form>
+      )}
         </Formik>
 )
 }
