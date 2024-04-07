@@ -60,8 +60,8 @@
 
 .buttonAdd {
     width: 150px;
-    border-radius: 60px;
-    background-color: #1d1d1d;
+    border-radius: 10px;
+    background-color: #282d6e;
     border: none;
     color: #fff;
     box-shadow: 0 4px 4px #00000026;
